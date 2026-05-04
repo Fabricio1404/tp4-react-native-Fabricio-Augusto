@@ -1,0 +1,27 @@
+{
+  "name": "tp2-react-native-fabricio-augusto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fabricio1404/tp2-react-native-Fabricio-Augusto.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Fabricio1404/tp2-react-native-Fabricio-Augusto/issues"
+  },
+  "homepage": "https://github.com/Fabricio1404/tp2-react-native-Fabricio-Augusto#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "mysql2": "^3.20.0"
+  }
+}

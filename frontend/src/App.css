@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;800&display=swap');
+
+:root {
+  --boca-blue: #002f87;
+  --boca-deep: #011b4b;
+  --boca-gold: #ffbf1f;
+  --ice: #eaf1ff;
+  --text-main: #f7f9ff;
+  --danger: #d93636;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  background: radial-gradient(circle at 15% 20%, #1147b0 0%, transparent 35%),
+    radial-gradient(circle at 85% 10%, #0a2f76 0%, transparent 38%),
+    linear-gradient(160deg, #01122f 0%, #002b77 45%, #00153b 100%);
+  min-height: 100vh;
+}
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  padding: 28px 22px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bg-shape {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  filter: blur(2px);
+}
+
+.bg-shape-left {
+  width: 260px;
+  height: 260px;
+  top: 80px;
+  left: -40px;
+  background: conic-gradient(from 90deg, transparent 0deg 40deg, var(--boca-gold) 40deg 100deg, transparent 100deg 360deg);
+  border-radius: 50%;
+}
+
+.bg-shape-right {
+  width: 290px;
+  height: 290px;
+  right: -60px;
+  bottom: 100px;
+  background: radial-gradient(circle, rgba(255, 191, 31, 0.8) 0%, transparent 65%);
+}
+
+.hero,
+.toolbar,
+.player-form,
+.players-grid,
+.status-text {
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: linear-gradient(130deg, rgba(0, 42, 119, 0.92), rgba(0, 20, 58, 0.96));
+  border: 1px solid rgba(255, 191, 31, 0.45);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.35);
+}
+
+.hero-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.hero-kicker {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ice);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  margin: 4px 0 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  color: var(--boca-gold);
+  letter-spacing: 1.5px;
+}
+
+.hero-pill {
+  background: rgba(255, 191, 31, 0.18);
+  border: 1px solid rgba(255, 191, 31, 0.5);
+  color: var(--boca-gold);
+  font-weight: 800;
+  padding: 10px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.toolbar {
+  margin-top: 20px;
+  margin-bottom: 18px;
+}
+
+.search-input {
+  width: min(420px, 100%);
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(255, 191, 31, 0.8);
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #11264f;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 4px rgba(255, 191, 31, 0.25);
+}
+
+.player-form {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 191, 31, 0.35);
+  background: rgba(1, 17, 48, 0.82);
+  backdrop-filter: blur(2px);
+}
+
+.player-input {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f8fbff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.player-select {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fbff;
+}
+
+.player-select option {
+  color: #102a54;
+  background: #ffffff;
+}
+
+.player-select:invalid {
+  color: rgba(234, 241, 255, 0.75);
+}
+
+.player-input::placeholder {
+  color: rgba(234, 241, 255, 0.75);
+}
+
+.player-input:focus {
+  outline: none;
+  border-color: var(--boca-gold);
+  box-shadow: 0 0 0 3px rgba(255, 191, 31, 0.2);
+}
+
+.btn-main,
+.btn-muted,
+.btn-edit,
+.btn-delete {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.btn-main:hover,
+.btn-muted:hover,
+.btn-edit:hover,
+.btn-delete:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.btn-main {
+  color: #1f2e54;
+  background: linear-gradient(180deg, #ffd665 0%, var(--boca-gold) 100%);
+}
+
+.btn-muted {
+  color: var(--text-main);
+  background: #4f5b79;
+}
+
+.players-grid {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.player-card {
+  background: linear-gradient(180deg, rgba(0, 50, 136, 0.9) 0%, rgba(0, 28, 77, 0.96) 100%);
+  border: 1px solid rgba(255, 191, 31, 0.55);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.player-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.35);
+}
+
+.player-dorsal {
+  color: var(--boca-gold);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 1.2px;
+}
+
+.player-name {
+  margin: 8px 0 4px;
+  color: #ffffff;
+  font-size: 1.15rem;
+}
+
+.player-position {
+  margin-top: 0;
+  margin-bottom: 14px;
+  color: #d3e3ff;
+}
+
+.btn-edit {
+  margin-right: 8px;
+  color: #1f2e54;
+  background: var(--boca-gold);
+}
+
+.btn-delete {
+  color: #ffffff;
+  background: var(--danger);
+}
+
+.status-text {
+  margin: 16px 0 0;
+  color: #f4f7ff;
+  font-weight: 700;
+}
+
+.error-text {
+  color: #ffc5c5;
+}
+
+@media (max-width: 900px) {
+  .player-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 16px 14px 24px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-logo {
+    margin: 0 auto;
+  }
+
+  .hero-pill {
+    justify-self: center;
+  }
+
+  .player-form {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-main,
+  .btn-muted {
+    width: 100%;
+  }
+}
