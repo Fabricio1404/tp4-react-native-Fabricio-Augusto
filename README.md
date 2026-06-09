@@ -1,164 +1,123 @@
-# TP2 - Gestion de Jugadores (React + Node.js + MySQL)
+# TP N°4 — Optimización con memo, useMemo y useCallback
 
-Aplicacion web para gestionar un plantel de futbol.
+**Materia:** Taller de Lenguajes de Programación III (React Native)  
+**Docente:** Rolón Lautaro Emanuel  
+**Docente auxiliar:** Mereles Juliana Aracelli  
+**Alumnos:** Augusto · Fabricio
 
-Permite:
-- Ver jugadores registrados.
-- Buscar jugadores por nombre.
-- Agregar nuevos jugadores.
-- Editar jugadores existentes.
-- Eliminar jugadores.
+---
 
-## Tecnologias
+## Descripción
 
-### Frontend
-- React
-- CSS
+Extensión del TP N°3 (Estado Global con Context API y useReducer) incorporando técnicas de **optimización de rendimiento** en React mediante `memo`, `useMemo` y `useCallback`.
 
-### Backend
-- Node.js
-- Express
-- MySQL (`mysql2`)
-- `dotenv` para variables de entorno
+---
 
-## Estructura del proyecto
+## Estructura relevante
 
-```text
-tp2-react-native-Fabricio-Augusto/
-	backend/
-		index.js
-		src/
-			config/database.js
-			controllers/
-			models/
-			routes/
-	frontend/
-		src/
-			App.jsx
-			App.css
-			components/
+```
+frontend/src/
+├── context/
+│   ├── JugadoresContext.jsx   ← useMemo + useCallback en funciones CRUD
+│   └── jugadoresReducer.js    ← Reducer (sin cambios)
+├── components/
+│   ├── Formulario.jsx         ← memo + useCallback en envío del form
+│   └── JugadorItem.jsx        ← memo para evitar rerenders
+└── App.jsx                    ← useMemo en filtrado + useCallback en búsqueda
 ```
 
-## Requisitos previos
+---
 
-- Node.js instalado
-- npm instalado
-- MySQL corriendo localmente
-- Base de datos creada (por ejemplo: `jugadores_db`)
+## Optimizaciones aplicadas
 
-## Configuracion de la base de datos
+### `memo`
 
-En `backend` crear el archivo `.env` con este formato:
+Evita que un componente se vuelva a renderizar si sus props no cambiaron.
 
-```env
-PORT=5000
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=
-DB_NAME=jugadores_db
-```
+| Componente     | Aplicación                                                      |
+|----------------|-----------------------------------------------------------------|
+| `JugadorItem`  | `export default memo(JugadorItem)` — no rerenderiza si el jugador no cambió |
+| `Formulario`   | `export default memo(Formulario)` — no rerenderiza si las funciones del context no cambiaron |
 
-Crear tabla `jugadores` (si todavia no existe):
+---
 
-```sql
-CREATE TABLE jugadores (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nombre VARCHAR(100) NOT NULL,
-	posicion VARCHAR(50) NOT NULL,
-	dorsal INT
+### `useMemo`
+
+Memoriza el resultado de un cálculo costoso, recalculando solo cuando cambian sus dependencias.
+
+**En `App.jsx` — filtrado de jugadores:**
+```js
+const filtrados = useMemo(() =>
+  listaJugadores.filter(j =>
+    j.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  ),
+  [listaJugadores, busqueda]
 );
 ```
+Sin `useMemo`, el filtro se recalcula en cada render aunque la lista y la búsqueda no hayan cambiado.
 
-## Instalacion (muy importante)
-
-Tenes que instalar dependencias en ambos lados, frontend y backend.
-
-### 1) Instalar dependencias del backend
-
-```bash
-cd backend
-npm i
+**En `JugadoresContext.jsx` — valor del Provider:**
+```js
+const value = useMemo(() => ({
+  jugadores, cargando, error, jugadorEnEdicion,
+  agregarJugador, eliminarJugador, iniciarEdicion, guardarEdicion, cancelarEdicion,
+}), [jugadores, cargando, error, jugadorEnEdicion, ...]);
 ```
+Evita que todos los consumidores del Context rerenderizen cuando el Provider lo hace por razones internas.
 
-### 2) Instalar dependencias del frontend
+---
 
-En otra terminal, o luego de terminar el paso anterior:
+### `useCallback`
 
-```bash
-cd frontend
-npm i
-```
+Memoriza una función para que no se recree en cada render, manteniendo la misma referencia mientras sus dependencias no cambien.
 
-## Como iniciar el proyecto
+| Función              | Archivo                  | Dependencias                   |
+|----------------------|--------------------------|--------------------------------|
+| `handleSearchChange` | `App.jsx`                | `[setBusqueda]`                |
+| `agregarJugador`     | `JugadoresContext.jsx`   | `[]`                           |
+| `eliminarJugador`    | `JugadoresContext.jsx`   | `[]`                           |
+| `guardarEdicion`     | `JugadoresContext.jsx`   | `[state.jugadorEnEdicion]`     |
+| `iniciarEdicion`     | `JugadoresContext.jsx`   | `[dispatch]`                   |
+| `cancelarEdicion`    | `JugadoresContext.jsx`   | `[dispatch]`                   |
+| `enviar` (form)      | `Formulario.jsx`         | `[datos, jugadorEnEdicion, ...]` |
 
-Necesitas 2 terminales abiertas.
+---
 
-### Terminal 1 - Backend
-
-```bash
-cd backend
-node index.js
-```
-
-Deberias ver:
-
-```text
-Servidor corriendo en puerto 5000
-```
-
-### Terminal 2 - Frontend
-
-```bash
-cd frontend
-npm start
-```
-
-Luego abrir:
-
-```text
-http://localhost:3000
-```
-
-## Como usar la pagina
-
-1. Escribir nombre, posicion y dorsal en el formulario.
-2. Presionar "AGREGAR AL PLANTEL" para crear un jugador.
-3. Usar el buscador para filtrar por nombre.
-4. Presionar "EDITAR" en una card para modificar datos.
-5. Guardar cambios con "GUARDAR CAMBIOS" o cancelar.
-6. Presionar "ELIMINAR" para borrar un jugador.
-
-## Endpoints principales del backend
-
-- `GET /jugadores` -> lista todos los jugadores
-- `POST /jugadores` -> crea un jugador
-- `PUT /jugadores/:id` -> actualiza un jugador
-- `DELETE /jugadores/:id` -> elimina un jugador
-
-## Problemas comunes
-
-### `npm start` falla en frontend
-- Verificar que corriste `npm i` dentro de `frontend`.
-- Verificar que estas parado en la carpeta correcta (`frontend`).
-
-### No carga jugadores / error de servidor
-- Verificar que el backend este corriendo en puerto `5000`.
-- Verificar datos de MySQL en `backend/.env`.
-- Verificar que exista la base y tabla `jugadores`.
-
-### Error de conexion a MySQL
-- Revisar `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`.
-- Confirmar que el servicio de MySQL este iniciado.
-
-## Scripts utiles
-
-### Frontend
-- `npm start` -> modo desarrollo
-- `npm run build` -> build de produccion
+## Cómo correr el proyecto
 
 ### Backend
-- `node index.js` -> iniciar API
+```bash
+cd backend
+npm install
+node index.js
+# Corre en http://localhost:5000
+```
 
-## Autor
+### Frontend
+```bash
+cd frontend
+npm install
+npm start
+# Corre en http://localhost:3000
+```
 
-Fabricio Augusto
+---
+
+## Subir cambios a main
+
+```bash
+git add .
+git commit -m "tp4: optimización con memo, useMemo y useCallback"
+git push origin main
+```
+
+---
+
+## Funcionalidades
+
+- Listado de jugadores consumido desde la API REST
+- Búsqueda por nombre en tiempo real (filtrado memorizado)
+- Agregar, editar y eliminar jugadores
+- Estado global con Context API y useReducer (del TP3)
+- Componentes optimizados con memo para evitar rerenders innecesarios
+- Funciones estables con useCallback para no romper la memoización de componentes hijos
