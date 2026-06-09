@@ -103,14 +103,6 @@ npm start
 
 ---
 
-## Subir cambios a main
-
-```bash
-git add .
-git commit -m "tp4: optimización con memo, useMemo y useCallback"
-git push origin main
-```
-
 ---
 
 ## Funcionalidades
